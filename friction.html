@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>八年級自然｜影響摩擦力因素互動實驗</title>
+<style>
+  :root{
+    --blue:#4f86c6;
+    --light:#eaf3ff;
+    --deep:#244b73;
+    --orange:#f08b35;
+    --green:#4ca66a;
+    --red:#d9534f;
+    --gray:#f6f7f9;
+    --line:#c9d6e2;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:"Microsoft JhengHei","Noto Sans TC",Arial,sans-serif;
+    background:linear-gradient(180deg,#f7fbff,#fff);
+    color:#263238;
+  }
+  header{
+    background:linear-gradient(120deg,#2f6fae,#74a8da);
+    color:white;
+    padding:22px 28px;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+  }
+  header h1{margin:0 0 8px;font-size:30px}
+  header p{margin:0;opacity:.95;font-size:16px}
+  main{max-width:1180px;margin:0 auto;padding:18px}
+  .tabs{
+    display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px;
+    position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);padding:10px 0;z-index:5
+  }
+  .tab{
+    border:0;border-radius:999px;padding:12px 18px;font-size:16px;
+    background:#dfeaf5;color:#244b73;cursor:pointer;font-weight:700;
+  }
+  .tab.active{background:var(--blue);color:white}
+  section{display:none}
+  section.active{display:block}
+  .card{
+    background:white;border:1px solid #d8e3ee;border-radius:18px;padding:18px;margin:14px 0;
+    box-shadow:0 4px 16px rgba(32,78,118,.08);
+  }
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}.tabs{position:static}}
+  h2{color:#244b73;margin:4px 0 12px}
+  h3{color:#315f8f;margin:6px 0 12px}
+  .hint{
+    background:#fff8e9;border-left:6px solid var(--orange);padding:12px 14px;border-radius:8px;margin:10px 0;
+    line-height:1.65;
+  }
+  .simbox{
+    height:360px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(#fdfefe 0 70%,#eef2f5 70% 100%);
+    position:relative;overflow:hidden;
+  }
+  .track{position:absolute;left:40px;right:40px;bottom:95px;height:10px;background:#b7c3ce;border-radius:8px}
+  .block{
+    position:absolute;width:120px;height:70px;border-radius:8px;bottom:105px;left:90px;
+    background:linear-gradient(90deg,#d9b985,#f1d8a9,#c99b62);
+    border:2px solid #b8854d;
+    box-shadow:inset 0 0 14px rgba(105,65,25,.25),0 5px 10px rgba(0,0,0,.12);
+    transition:left .08s linear;
+  }
+  .mass{
+    width:42px;height:28px;border-radius:7px 7px 4px 4px;background:#6b7f93;color:white;
+    display:inline-flex;align-items:center;justify-content:center;font-size:12px;margin:0 2px;box-shadow:0 2px 4px rgba(0,0,0,.18)
+  }
+  .masses{position:absolute;bottom:176px;left:96px;width:160px;text-align:center;transition:left .08s linear}
+  .spring{
+    position:absolute;height:8px;bottom:138px;left:210px;width:210px;
+    background:repeating-linear-gradient(90deg,#555 0 6px,transparent 6px 12px);
+    border-top:1px solid #777;border-bottom:1px solid #777;transition:left .08s linear,width .08s linear;
+  }
+  .scale{
+    position:absolute;bottom:117px;left:420px;width:210px;height:50px;background:#fff;border:3px solid #56616c;border-radius:28px;
+    display:flex;align-items:center;justify-content:center;font-weight:800;color:#153e63;font-size:22px;
+    transition:left .08s linear;
+  }
+  .hook{position:absolute;bottom:133px;width:42px;height:22px;border:5px solid #56616c;border-left:0;border-radius:0 20px 20px 0}
+  .arrow{position:absolute;height:4px;background:var(--red);bottom:145px;left:645px;border-radius:5px}
+  .arrow::after{content:"";position:absolute;right:-2px;top:-6px;border-left:14px solid var(--red);border-top:8px solid transparent;border-bottom:8px solid transparent}
+  .fricArrow{position:absolute;height:4px;background:#3f61c4;bottom:100px;border-radius:5px}
+  .fricArrow::before{content:"";position:absolute;left:-2px;top:-6px;border-right:14px solid #3f61c4;border-top:8px solid transparent;border-bottom:8px solid transparent}
+  .label{
+    position:absolute;background:white;border:1px solid #c7d6e6;border-radius:999px;padding:5px 10px;font-weight:700;color:#254b72;
+  }
+  .status{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px
+  }
+  .stat{background:var(--light);border-radius:12px;padding:12px;text-align:center;font-weight:800;color:#244b73}
+  .stat span{display:block;font-size:26px;margin-top:6px;color:#111}
+  .controls{
+    display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0;
+  }
+  input[type=range]{width:360px;max-width:100%}
+  button, select{
+    font-family:inherit;font-size:16px;border-radius:10px;border:1px solid #b8c9da;background:white;padding:9px 12px;
+  }
+  button.primary{background:var(--blue);color:white;border-color:var(--blue);font-weight:800;cursor:pointer}
+  button.orange{background:var(--orange);color:white;border-color:var(--orange);font-weight:800;cursor:pointer}
+  button.green{background:var(--green);color:white;border-color:var(--green);font-weight:800;cursor:pointer}
+  table{border-collapse:collapse;width:100%;font-size:15px;background:white}
+  th,td{border:1px solid #c8d4df;padding:8px;text-align:center}
+  th{background:#dceaf7;color:#223d59}
+  td[contenteditable=true]{background:#fffdf4}
+  .canvasWrap{overflow:auto;background:#fff;border:1px solid #ccd9e6;border-radius:14px;padding:10px}
+  canvas{background:#fff;display:block;margin:auto;touch-action:none}
+  .small{font-size:14px;color:#607080;line-height:1.6}
+  .pill{display:inline-block;border-radius:999px;background:#e8f2fc;color:#28557e;padding:6px 12px;font-weight:700;margin:2px}
+  .surfaceChoices{display:flex;flex-wrap:wrap;gap:8px}
+  .surfaceBtn{cursor:pointer}
+  .surfaceBtn.active{background:#244b73;color:white}
+  .barInput{width:80px;text-align:center}
+  .rubric{line-height:1.8}
+  .resultBox{
+    border:2px dashed #a8bdd2;border-radius:14px;padding:12px;margin-top:10px;background:#fbfdff;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>八年級自然｜影響摩擦力因素互動實驗</h1>
+  <p>三個小實驗：拉力與摩擦力、垂直作用力、接觸面性質。可拉動、記錄、點圖、連線與畫長條圖。</p>
+</header>
+<main>
+  <div class="tabs">
+    <button class="tab active" onclick="openTab(0)">實驗一：拉力與摩擦力</button>
+    <button class="tab" onclick="openTab(1)">實驗二：垂直作用力</button>
+    <button class="tab" onclick="openTab(2)">實驗三：接觸面性質</button>
+    <button class="tab" onclick="openTab(3)">教師操作說明</button>
+  </div>
+
+  <section class="active">
+    <div class="card">
+      <h2>實驗一：探討拉力與摩擦力的關係</h2>
+      <div class="hint">
+        操作方式：拖曳「拉力」滑桿，模擬用手拉彈簧秤。木塊靜止時，靜摩擦力會隨拉力增加且大小相等；拉到 250 gw 時達最大靜摩擦力，木塊開始移動；移動後動摩擦力固定為 200 gw。
+      </div>
+      <div class="grid">
+        <div>
+          <div class="simbox" id="sim1">
+            <div class="track"></div>
+            <div class="block" id="block1"></div>
+            <div class="spring" id="spring1"></div>
+            <div class="scale" id="scale1">0 gw</div>
+            <div class="hook" id="hook1"></div>
+            <div class="arrow" id="pullArrow1" style="width:0"></div>
+            <div class="fricArrow" id="fricArrow1" style="left:90px;width:0"></div>
+            <div class="label" id="statusLabel1" style="left:70px;top:28px">狀態：靜止</div>
+            <div class="label" id="fricLabel1" style="left:70px;top:72px">摩擦力：0 gw</div>
+          </div>
+          <div class="controls">
+            <label><b>拉力：</b><input id="force1" type="range" min="0" max="500" step="5" value="0" oninput="updateExp1()"></label>
+            <button class="primary" onclick="recordExp1()">記錄本次數據</button>
+            <button onclick="autoFillExp1()">自動示範10筆</button>
+            <button onclick="resetExp1()">重設</button>
+          </div>
+          <div class="status">
+            <div class="stat">外力<span id="outForce1">0 gw</span></div>
+            <div class="stat">摩擦力<span id="friction1">0 gw</span></div>
+            <div class="stat">運動狀態<span id="motion1">靜止</span></div>
+          </div>
+        </div>
+        <div>
+          <h3>紀錄表：探討拉力與摩擦力</h3>
+          <table id="table1">
+            <thead><tr><th>次數</th><th>外力 F（gw）</th><th>摩擦力 f（gw）</th><th>運動狀態</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <p class="small">最多記錄10筆。可直接修改表格數字，再用下方座標圖點圖或自動繪圖。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>座標圖：請依紀錄表點出座標</h3>
+      <p class="small">橫軸：外力 F（gw）；縱軸：摩擦力 f（gw）。每一格為 5 gw。點選圖面可手動標點；也可按「依表格自動繪圖」。</p>
+      <div class="controls">
+        <button class="green" onclick="plotFromTable1()">依表格自動繪圖</button>
+        <button onclick="clearCanvas(graph1)">清除座標點</button>
+      </div>
+      <div class="canvasWrap"><canvas id="graph1" width="760" height="520"></canvas></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="card">
+      <h2>實驗二：探討最大靜摩擦力與垂直作用力大小的關係</h2>
+      <div class="hint">
+        操作方式：選擇放在木塊上的砝碼數量，再拉動彈簧秤直到木塊剛開始移動。基本設定：未加砝碼時最大靜摩擦力為 250 gw；每增加 50 g 砝碼，最大靜摩擦力增加 10 gw。
+      </div>
+      <div class="grid">
+        <div>
+          <div class="simbox">
+            <div class="track"></div>
+            <div class="block" id="block2"></div>
+            <div class="masses" id="masses2"></div>
+            <div class="spring" id="spring2"></div>
+            <div class="scale" id="scale2">0 gw</div>
+            <div class="hook" id="hook2"></div>
+            <div class="arrow" id="pullArrow2" style="width:0"></div>
+            <div class="fricArrow" id="fricArrow2" style="left:90px;width:0"></div>
+            <div class="label" id="statusLabel2" style="left:70px;top:28px">砝碼：0 g</div>
+            <div class="label" id="fricLabel2" style="left:70px;top:72px">最大靜摩擦力：250 gw</div>
+          </div>
+          <div class="controls">
+            <label><b>砝碼數量：</b>
+              <select id="massCount2" onchange="updateExp2Mass()">
+                <option value="0">0個（0 g）</option>
+                <option value="1">1個（50 g）</option>
+                <option value="2">2個（100 g）</option>
+                <option value="3">3個（150 g）</option>
+                <option value="4">4個（200 g）</option>
+              </select>
+            </label>
+            <label><b>拉力：</b><input id="force2" type="range" min="0" max="350" step="5" value="0" oninput="updateExp2()"></label>
+            <button class="primary" onclick="recordExp2()">記錄本次數據</button>
+            <button onclick="autoFillExp2()">自動示範</button>
+            <button onclick="resetExp2()">重設</button>
+          </div>
+          <div class="status">
+            <div class="stat">物體重量<span id="weight2">木塊+0g</span></div>
+            <div class="stat">拉力<span id="outForce2">0 gw</span></div>
+            <div class="stat">最大靜摩擦力<span id="maxStatic2">250 gw</span></div>
+          </div>
+        </div>
+        <div>
+          <h3>紀錄表：最大靜摩擦力與物體重量</h3>
+          <table id="table2">
+            <thead>
+              <tr><th>物體與砝碼</th><th>第一次</th><th>第二次</th><th>第三次</th><th>平均</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p class="small">表格已增加 150 g 與 200 g 砝碼情形。平均值會自動計算。</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>座標圖：最大靜摩擦力與物體重量</h3>
+      <p class="small">橫軸：物體重量／加上的砝碼重量（gw），此互動版以「木塊 + 砝碼重量」標示；縱軸：最大靜摩擦力（gw）。點選圖面可手動標點，也可依平均值自動繪圖並連線。</p>
+      <div class="controls">
+        <button class="green" onclick="plotFromTable2()">依表格自動繪圖並連線</button>
+        <button onclick="clearCanvas(graph2)">清除座標點</button>
+      </div>
+      <div class="canvasWrap"><canvas id="graph2" width="760" height="520"></canvas></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="card">
+      <h2>實驗三：探討最大靜摩擦力與接觸面性質的關係</h2>
+      <div class="hint">
+        操作方式：選擇不同接觸面，拉動彈簧秤直到木塊剛開始移動。系統會顯示該接觸面的最大靜摩擦力，並填入表格。學生最後依表格繪製長條圖。
+      </div>
+      <div class="grid">
+        <div>
+          <div class="simbox">
+            <div class="track" id="surfaceTrack3"></div>
+            <div class="block" id="block3"></div>
+            <div class="spring" id="spring3"></div>
+            <div class="scale" id="scale3">0 gw</div>
+            <div class="hook" id="hook3"></div>
+            <div class="arrow" id="pullArrow3" style="width:0"></div>
+            <div class="fricArrow" id="fricArrow3" style="left:90px;width:0"></div>
+            <div class="label" id="statusLabel3" style="left:70px;top:28px">接觸面：桌面</div>
+            <div class="label" id="fricLabel3" style="left:70px;top:72px">最大靜摩擦力：250 gw</div>
+          </div>
+          <div class="controls surfaceChoices">
+            <button class="surfaceBtn active" onclick="chooseSurface('桌面', this)">桌面</button>
+            <button class="surfaceBtn" onclick="chooseSurface('玻璃板', this)">玻璃板</button>
+            <button class="surfaceBtn" onclick="chooseSurface('泡棉', this)">泡棉</button>
+            <button class="surfaceBtn" onclick="chooseSurface('透明桌墊', this)">透明桌墊</button>
+            <button class="surfaceBtn" onclick="chooseSurface('砂紙', this)">砂紙</button>
+          </div>
+          <div class="controls">
+            <label><b>拉力：</b><input id="force3" type="range" min="0" max="500" step="5" value="0" oninput="updateExp3()"></label>
+            <button class="primary" onclick="recordExp3()">記錄本次數據</button>
+            <button onclick="autoFillExp3()">自動示範</button>
+            <button onclick="resetExp3()">重設</button>
+          </div>
+          <div class="status">
+            <div class="stat">接觸面<span id="surface3">桌面</span></div>
+            <div class="stat">拉力<span id="outForce3">0 gw</span></div>
+            <div class="stat">最大靜摩擦力<span id="maxStatic3">250 gw</span></div>
+          </div>
+        </div>
+        <div>
+          <h3>紀錄表：最大靜摩擦力與接觸面性質</h3>
+          <table id="table3">
+            <thead>
+              <tr><th>接觸面</th><th>第一次</th><th>第二次</th><th>第三次</th><th>平均</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p class="small">可修改每次測量數據，平均值會自動更新。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>長條圖：依表格繪製最大靜摩擦力</h3>
+      <p class="small">學生可先在表格記錄數據，再按「依平均值產生長條圖」。也可以在圖上方直接調整平均值後重新繪圖。</p>
+      <div class="controls" id="barInputs"></div>
+      <div class="controls">
+        <button class="green" onclick="plotBarFromTable3()">依平均值產生長條圖</button>
+        <button onclick="clearCanvas(barCanvas)">清除長條圖</button>
+      </div>
+      <div class="canvasWrap"><canvas id="barCanvas" width="760" height="520"></canvas></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="card rubric">
+      <h2>教師操作說明</h2>
+      <p><span class="pill">建議課程流程</span> 先請學生觀察模擬，再自行調整拉力與變因，最後把表格資料轉成圖表，討論圖形代表的物理意義。</p>
+      <p><b>實驗一重點：</b>木塊未動前，靜摩擦力會「配合」外力改變；達 250 gw 後是最大靜摩擦力；運動後摩擦力變為 200 gw，若外力仍大於 200 gw，木塊速度會越來越快。</p>
+      <p><b>實驗二重點：</b>垂直作用力越大，最大靜摩擦力越大。本版本用砝碼重量代表增加的垂直作用力，數據設定為每增加 50 g，最大靜摩擦力增加 10 gw。</p>
+      <p><b>實驗三重點：</b>接觸面越粗糙，最大靜摩擦力通常越大。預設數值可作為課堂模擬：玻璃板 180、桌面 250、透明桌墊 280、泡棉 330、砂紙 400 gw。</p>
+      <div class="resultBox">
+        <b>提醒：</b>本網頁可直接離線開啟。若要放到 GitHub Pages，請把此 HTML 檔上傳到 repository，檔名可改成 <code>index.html</code>。
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+let currentTab = 0;
+function openTab(i){
+  currentTab=i;
+  document.querySelectorAll('.tab').forEach((b,idx)=>b.classList.toggle('active',idx===i));
+  document.querySelectorAll('section').forEach((s,idx)=>s.classList.toggle('active',idx===i));
+  setTimeout(()=>{drawAllAxes()},50);
+}
+
+function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
+function setText(id,txt){document.getElementById(id).textContent=txt}
+function getNum(v){let n=parseFloat(v);return isNaN(n)?0:n}
+
+let exp1Records=[];
+let pos1=90, vel1=0;
+function exp1Friction(F){
+  if(F<250) return {f:F, status:'靜止', moving:false};
+  if(F===250) return {f:250, status:'最大靜摩擦力，剛要移動', moving:false};
+  return {f:200, status:'運動中，速度增加', moving:true};
+}
+function updateExp1(){
+  const F=+document.getElementById('force1').value;
+  const r=exp1Friction(F);
+  if(r.moving){vel1 += (F-200)/950; pos1 += vel1; if(pos1>500){pos1=90;vel1=0}}
+  else{pos1=90;vel1=0}
+  const block=document.getElementById('block1');
+  block.style.left=pos1+'px';
+  document.getElementById('spring1').style.left=(pos1+120)+'px';
+  document.getElementById('scale1').style.left=(pos1+330)+'px';
+  document.getElementById('hook1').style.left=(pos1+300)+'px';
+  document.getElementById('pullArrow1').style.left=(pos1+560)+'px';
+  document.getElementById('pullArrow1').style.width=clamp(F/2,0,250)+'px';
+  const fw=clamp(r.f/2,0,250);
+  const fa=document.getElementById('fricArrow1');
+  fa.style.left=(pos1-fw+10)+'px'; fa.style.width=fw+'px';
+  setText('scale1',F+' gw'); setText('outForce1',F+' gw'); setText('friction1',r.f+' gw'); setText('motion1',r.status);
+  setText('statusLabel1','狀態：'+r.status); setText('fricLabel1','摩擦力：'+r.f+' gw');
+}
+function recordExp1(){
+  if(exp1Records.length>=10){alert('已達10筆，可先重設或修改表格。');return}
+  const F=+document.getElementById('force1').value;
+  const r=exp1Friction(F);
+  exp1Records.push({F:F,f:r.f,status:r.status});
+  renderTable1();
+}
+function renderTable1(){
+  const tb=document.querySelector('#table1 tbody'); tb.innerHTML='';
+  exp1Records.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i+1}</td><td contenteditable="true">${r.F}</td><td contenteditable="true">${r.f}</td><td>${r.status}</td>`;
+    tb.appendChild(tr);
+  })
+}
+function autoFillExp1(){
+  exp1Records=[0,50,100,150,200,250,300,350,400,500].map(F=>{let r=exp1Friction(F);return {F:F,f:r.f,status:r.status}});
+  renderTable1(); plotFromTable1();
+}
+function resetExp1(){exp1Records=[];renderTable1();document.getElementById('force1').value=0;updateExp1();clearCanvas(graph1)}
+
+const baseWeight=100; // 木塊假設100gw，供圖表參考
+let exp2Data={0:[],50:[],100:[],150:[],200:[]};
+function maxStatic2For(mass){return 250 + mass/50*10}
+function updateExp2Mass(){
+  const count=+document.getElementById('massCount2').value;
+  const mass=count*50;
+  const box=document.getElementById('masses2');
+  box.innerHTML='';
+  for(let i=0;i<count;i++){box.innerHTML+='<span class="mass">50g</span>'}
+  setText('statusLabel2','砝碼：'+mass+' g');
+  setText('fricLabel2','最大靜摩擦力：'+maxStatic2For(mass)+' gw');
+  setText('weight2','木塊+'+mass+'g');
+  setText('maxStatic2',maxStatic2For(mass)+' gw');
+  updateExp2();
+}
+function updateExp2(){
+  const count=+document.getElementById('massCount2').value;
+  const mass=count*50, maxF=maxStatic2For(mass);
+  const F=+document.getElementById('force2').value;
+  const moving=F>=maxF;
+  let p=moving?clamp(90+(F-maxF)*1.2,90,500):90;
+  ['block2','masses2'].forEach(id=>document.getElementById(id).style.left=(id==='masses2'?p+6:p)+'px');
+  document.getElementById('spring2').style.left=(p+120)+'px';
+  document.getElementById('scale2').style.left=(p+330)+'px';
+  document.getElementById('hook2').style.left=(p+300)+'px';
+  document.getElementById('pullArrow2').style.left=(p+560)+'px';
+  document.getElementById('pullArrow2').style.width=clamp(F/2,0,220)+'px';
+  const fw=clamp(Math.min(F,maxF)/2,0,250);
+  const fa=document.getElementById('fricArrow2');
+  fa.style.left=(p-fw+10)+'px'; fa.style.width=fw+'px';
+  setText('scale2',F+' gw'); setText('outForce2',F+' gw');
+}
+function renderTable2(){
+  const tb=document.querySelector('#table2 tbody'); tb.innerHTML='';
+  [0,50,100,150,200].forEach(m=>{
+    const arr=exp2Data[m]; const avg=arr.length?Math.round(arr.reduce((a,b)=>a+b,0)/arr.length):'';
+    let cells=[0,1,2].map(i=>`<td contenteditable="true">${arr[i]??''}</td>`).join('');
+    tb.innerHTML += `<tr data-mass="${m}"><td>木塊 + ${m} g 砝碼</td>${cells}<td class="avg2">${avg}</td></tr>`;
+  });
+  document.querySelectorAll('#table2 td[contenteditable=true]').forEach(td=>td.oninput=updateAvg2);
+}
+function updateAvg2(){
+  document.querySelectorAll('#table2 tbody tr').forEach(tr=>{
+    const vals=[...tr.querySelectorAll('td[contenteditable=true]')].map(td=>getNum(td.textContent)).filter(v=>v>0);
+    tr.querySelector('.avg2').textContent=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):'';
+  });
+}
+function recordExp2(){
+  const mass=+document.getElementById('massCount2').value*50;
+  const F=+document.getElementById('force2').value, maxF=maxStatic2For(mass);
+  if(F<maxF){alert('還沒拉到木塊移動瞬間，請把拉力拉到 '+maxF+' gw 以上。');return}
+  if(exp2Data[mass].length>=3){alert('此重量已記錄3次。');return}
+  exp2Data[mass].push(maxF); renderTable2();
+}
+function autoFillExp2(){
+  exp2Data={0:[250,250,250],50:[260,260,260],100:[270,270,270],150:[280,280,280],200:[290,290,290]};
+  renderTable2(); plotFromTable2();
+}
+function resetExp2(){exp2Data={0:[],50:[],100:[],150:[],200:[]};renderTable2();document.getElementById('force2').value=0;updateExp2Mass();clearCanvas(graph2)}
+
+let surface='桌面';
+const surfaceValues={'桌面':250,'玻璃板':180,'泡棉':330,'透明桌墊':280,'砂紙':400};
+let surfaceData={'桌面':[],'玻璃板':[],'泡棉':[],'透明桌墊':[],'砂紙':[]};
+function chooseSurface(s,btn){
+  surface=s; document.querySelectorAll('.surfaceBtn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  const track=document.getElementById('surfaceTrack3');
+  track.style.background = s==='玻璃板'?'#bfe8ef':s==='泡棉'?'#d1b28b':s==='透明桌墊'?'#b6e2d7':s==='砂紙'?'#8b7a6a':'#b7c3ce';
+  setText('surface3',s); setText('statusLabel3','接觸面：'+s); setText('fricLabel3','最大靜摩擦力：'+surfaceValues[s]+' gw'); setText('maxStatic3',surfaceValues[s]+' gw');
+  updateExp3();
+}
+function updateExp3(){
+  const maxF=surfaceValues[surface], F=+document.getElementById('force3').value;
+  const moving=F>=maxF; let p=moving?clamp(90+(F-maxF)*1.05,90,500):90;
+  document.getElementById('block3').style.left=p+'px';
+  document.getElementById('spring3').style.left=(p+120)+'px';
+  document.getElementById('scale3').style.left=(p+330)+'px';
+  document.getElementById('hook3').style.left=(p+300)+'px';
+  document.getElementById('pullArrow3').style.left=(p+560)+'px';
+  document.getElementById('pullArrow3').style.width=clamp(F/2,0,250)+'px';
+  const fw=clamp(Math.min(F,maxF)/2,0,250);
+  const fa=document.getElementById('fricArrow3');
+  fa.style.left=(p-fw+10)+'px'; fa.style.width=fw+'px';
+  setText('scale3',F+' gw'); setText('outForce3',F+' gw');
+}
+function renderTable3(){
+  const tb=document.querySelector('#table3 tbody'); tb.innerHTML='';
+  Object.keys(surfaceValues).forEach(s=>{
+    const arr=surfaceData[s]; const avg=arr.length?Math.round(arr.reduce((a,b)=>a+b,0)/arr.length):'';
+    let cells=[0,1,2].map(i=>`<td contenteditable="true">${arr[i]??''}</td>`).join('');
+    tb.innerHTML += `<tr data-surface="${s}"><td>${s}</td>${cells}<td class="avg3">${avg}</td></tr>`;
+  });
+  document.querySelectorAll('#table3 td[contenteditable=true]').forEach(td=>td.oninput=()=>{updateAvg3();updateBarInputs()});
+  updateBarInputs();
+}
+function updateAvg3(){
+  document.querySelectorAll('#table3 tbody tr').forEach(tr=>{
+    const vals=[...tr.querySelectorAll('td[contenteditable=true]')].map(td=>getNum(td.textContent)).filter(v=>v>0);
+    tr.querySelector('.avg3').textContent=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):'';
+  });
+}
+function recordExp3(){
+  const F=+document.getElementById('force3').value, maxF=surfaceValues[surface];
+  if(F<maxF){alert('還沒拉到木塊移動瞬間，請把拉力拉到 '+maxF+' gw 以上。');return}
+  if(surfaceData[surface].length>=3){alert('此接觸面已記錄3次。');return}
+  surfaceData[surface].push(maxF); renderTable3();
+}
+function autoFillExp3(){
+  surfaceData={'桌面':[250,250,250],'玻璃板':[180,180,180],'泡棉':[330,330,330],'透明桌墊':[280,280,280],'砂紙':[400,400,400]};
+  renderTable3(); plotBarFromTable3();
+}
+function resetExp3(){surfaceData={'桌面':[],'玻璃板':[],'泡棉':[],'透明桌墊':[],'砂紙':[]};renderTable3();document.getElementById('force3').value=0;updateExp3();clearCanvas(barCanvas)}
+
+function setupCanvas(canvas,opts){
+  const ctx=canvas.getContext('2d');
+  canvas.points=[];
+  canvas.opts=opts;
+  drawAxes(canvas);
+  canvas.onclick=(e)=>{
+    const rect=canvas.getBoundingClientRect();
+    const x=e.clientX-rect.left, y=e.clientY-rect.top;
+    const p=pixelToValue(canvas,x,y);
+    if(p){
+      canvas.points.push(p);
+      drawAxes(canvas);
+      drawPoints(canvas, canvas.points, opts.connect);
+    }
+  }
+}
+function drawAxes(canvas){
+  const ctx=canvas.getContext('2d'), o=canvas.opts||{};
+  const L=70,R=30,T=30,B=70,W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='white';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#333';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(L,T);ctx.lineTo(L,H-B);ctx.lineTo(W-R,H-B);ctx.stroke();
+  const xmax=o.xmax||500, ymax=o.ymax||500, step=o.step||50, minor=o.minor||5;
+  ctx.font='13px Microsoft JhengHei';ctx.fillStyle='#333';ctx.textAlign='center';
+  ctx.strokeStyle='#edf1f5';ctx.lineWidth=1;
+  for(let v=0;v<=xmax;v+=minor){
+    const x=L+v/xmax*(W-L-R);
+    if(v%step===0){ctx.strokeStyle='#d0d9e2'} else {ctx.strokeStyle='#f1f4f7'}
+    ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,H-B);ctx.stroke();
+    if(v%step===0){ctx.fillStyle='#333';ctx.fillText(v,x,H-B+22)}
+  }
+  ctx.textAlign='right';
+  for(let v=0;v<=ymax;v+=minor){
+    const y=H-B-v/ymax*(H-T-B);
+    if(v%step===0){ctx.strokeStyle='#d0d9e2'} else {ctx.strokeStyle='#f1f4f7'}
+    ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(W-R,y);ctx.stroke();
+    if(v%step===0){ctx.fillStyle='#333';ctx.fillText(v,L-10,y+4)}
+  }
+  ctx.save();ctx.textAlign='center';ctx.fillStyle='#244b73';ctx.font='bold 16px Microsoft JhengHei';
+  ctx.fillText(o.xlabel||'X軸', (L+W-R)/2, H-22);
+  ctx.translate(20,(T+H-B)/2);ctx.rotate(-Math.PI/2);ctx.fillText(o.ylabel||'Y軸',0,0);ctx.restore();
+}
+function valueToPixel(canvas,p){
+  const L=70,R=30,T=30,B=70,W=canvas.width,H=canvas.height,o=canvas.opts;
+  return {x:L+p.x/o.xmax*(W-L-R), y:H-B-p.y/o.ymax*(H-T-B)}
+}
+function pixelToValue(canvas,x,y){
+  const L=70,R=30,T=30,B=70,W=canvas.width,H=canvas.height,o=canvas.opts;
+  if(x<L||x>W-R||y<T||y>H-B)return null;
+  let vx=(x-L)/(W-L-R)*o.xmax, vy=(H-B-y)/(H-T-B)*o.ymax;
+  vx=Math.round(vx/5)*5; vy=Math.round(vy/5)*5;
+  return {x:vx,y:vy};
+}
+function drawPoints(canvas,points,connect=false){
+  const ctx=canvas.getContext('2d');
+  if(connect && points.length>1){
+    ctx.strokeStyle='#4f86c6';ctx.lineWidth=3;ctx.beginPath();
+    points.forEach((p,i)=>{let q=valueToPixel(canvas,p); if(i===0)ctx.moveTo(q.x,q.y); else ctx.lineTo(q.x,q.y)});
+    ctx.stroke();
+  }
+  points.forEach(p=>{
+    const q=valueToPixel(canvas,p);
+    ctx.fillStyle='#f08b35';ctx.beginPath();ctx.arc(q.x,q.y,6,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#333';ctx.font='12px Microsoft JhengHei';ctx.textAlign='left';
+    ctx.fillText(`(${p.x},${p.y})`,q.x+8,q.y-8);
+  })
+}
+function clearCanvas(canvas){canvas.points=[];drawAxes(canvas)}
+
+function plotFromTable1(){
+  const rows=[...document.querySelectorAll('#table1 tbody tr')];
+  const pts=rows.map(tr=>{
+    const tds=tr.querySelectorAll('td');
+    return {x:getNum(tds[1].textContent),y:getNum(tds[2].textContent)};
+  }).filter(p=>p.x>=0 && p.y>=0);
+  graph1.points=pts; drawAxes(graph1); drawPoints(graph1,pts,true);
+}
+function plotFromTable2(){
+  updateAvg2();
+  const pts=[...document.querySelectorAll('#table2 tbody tr')].map(tr=>{
+    const mass=+tr.dataset.mass, avg=getNum(tr.querySelector('.avg2').textContent);
+    return avg?{x:baseWeight+mass,y:avg}:null;
+  }).filter(Boolean);
+  graph2.points=pts; drawAxes(graph2); drawPoints(graph2,pts,true);
+}
+
+function updateBarInputs(){
+  const div=document.getElementById('barInputs'); div.innerHTML='';
+  Object.keys(surfaceValues).forEach(s=>{
+    const tr=[...document.querySelectorAll('#table3 tbody tr')].find(r=>r.dataset.surface===s);
+    const avg=tr?tr.querySelector('.avg3').textContent:'';
+    div.innerHTML += `<label>${s} <input class="barInput" data-surface="${s}" type="number" value="${avg}" placeholder="gw"> gw</label>`;
+  });
+}
+function plotBarFromTable3(){
+  updateAvg3(); updateBarInputs();
+  const vals=[...document.querySelectorAll('.barInput')].map(inp=>({s:inp.dataset.surface,v:getNum(inp.value)})).filter(d=>d.v>0);
+  drawBarChart(barCanvas, vals);
+}
+function drawBarChart(canvas,vals){
+  const ctx=canvas.getContext('2d'), W=canvas.width,H=canvas.height,L=70,R=30,T=30,B=80;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='white';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#333';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(L,T);ctx.lineTo(L,H-B);ctx.lineTo(W-R,H-B);ctx.stroke();
+  const maxY=450, step=50;
+  ctx.font='13px Microsoft JhengHei';ctx.fillStyle='#333';ctx.textAlign='right';
+  for(let y=0;y<=maxY;y+=step){
+    const py=H-B-y/maxY*(H-T-B);
+    ctx.strokeStyle='#d0d9e2';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(L,py);ctx.lineTo(W-R,py);ctx.stroke();
+    ctx.fillStyle='#333';ctx.fillText(y,L-10,py+4);
+  }
+  const n=vals.length||1, gap=24, bw=(W-L-R-gap*(n+1))/n;
+  vals.forEach((d,i)=>{
+    const x=L+gap+i*(bw+gap), h=d.v/maxY*(H-T-B), y=H-B-h;
+    ctx.fillStyle='#74a8da';ctx.fillRect(x,y,bw,h);
+    ctx.strokeStyle='#244b73';ctx.strokeRect(x,y,bw,h);
+    ctx.fillStyle='#333';ctx.textAlign='center';
+    ctx.fillText(d.v+' gw',x+bw/2,y-8);
+    ctx.save();ctx.translate(x+bw/2,H-B+22);ctx.rotate(-Math.PI/8);ctx.fillText(d.s,0,0);ctx.restore();
+  });
+  ctx.save();ctx.textAlign='center';ctx.fillStyle='#244b73';ctx.font='bold 16px Microsoft JhengHei';
+  ctx.fillText('接觸面性質',(L+W-R)/2,H-20);
+  ctx.translate(20,(T+H-B)/2);ctx.rotate(-Math.PI/2);ctx.fillText('最大靜摩擦力（gw）',0,0);ctx.restore();
+}
+
+function drawAllAxes(){
+  if(window.graph1) drawAxes(graph1), drawPoints(graph1,graph1.points||[],true);
+  if(window.graph2) drawAxes(graph2), drawPoints(graph2,graph2.points||[],true);
+  if(window.barCanvas && (!barCanvas.getContext('2d').__drawn)){}
+}
+
+window.onload=()=>{
+  window.graph1=document.getElementById('graph1');
+  window.graph2=document.getElementById('graph2');
+  window.barCanvas=document.getElementById('barCanvas');
+  setupCanvas(graph1,{xmax:500,ymax:500,step:50,minor:5,xlabel:'外力 F（gw）',ylabel:'摩擦力 f（gw）',connect:true});
+  setupCanvas(graph2,{xmax:350,ymax:350,step:50,minor:5,xlabel:'物體重量：木塊+砝碼（gw）',ylabel:'最大靜摩擦力（gw）',connect:true});
+  renderTable1(); renderTable2(); renderTable3();
+  updateExp1(); updateExp2Mass(); updateExp3(); drawBarChart(barCanvas,[]);
+}
+</script>
+</body>
+</html>
