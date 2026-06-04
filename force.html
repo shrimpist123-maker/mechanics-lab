@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>力的測量｜砝碼質量與彈簧總長度互動</title>
+<style>
+  :root{
+    --bg:#f7f1df; --paper:#fffaf0; --ink:#2f2a24; --grid:#d9ccb2;
+    --accent:#9b5f35; --blue:#315f8c; --red:#b94a48; --green:#3d7c59;
+  }
+  body{margin:0;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:linear-gradient(180deg,#fbf5e8,#efe2c9);color:var(--ink)}
+  header{padding:18px 24px;text-align:center;background:#5a3d2b;color:white;box-shadow:0 3px 12px #0002}
+  h1{margin:0;font-size:28px;letter-spacing:2px} header p{margin:6px 0 0;font-size:15px;opacity:.95}
+  .wrap{display:grid;grid-template-columns:1fr 310px;gap:16px;padding:16px;max-width:1280px;margin:auto}
+  .card{background:var(--paper);border:2px solid #d8c4a3;border-radius:18px;box-shadow:0 8px 20px #4b38261c;overflow:hidden}
+  #canvasBox{position:relative;padding:10px}.toolbar{padding:12px 14px;border-bottom:1px dashed #cbb894;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  button{border:0;border-radius:12px;padding:10px 14px;background:#6f4b33;color:white;font-weight:700;cursor:pointer;box-shadow:0 3px 0 #3d281b}
+  button.secondary{background:#6a7b5a}.hint{font-size:14px;color:#5d5144}.side{padding:16px;line-height:1.7}.readout{font-size:20px;font-weight:800;color:#6f3f25;background:#fff3d7;border-radius:12px;padding:10px;margin-bottom:12px}
+  .formula{background:#f4ead5;border-left:6px solid var(--accent);padding:10px 12px;border-radius:10px;margin:12px 0}.warn{display:none;background:#ffe2df;border-left:6px solid var(--red);padding:10px 12px;border-radius:10px;margin:12px 0;font-weight:700;color:#8a2d2a}
+  svg{width:100%;height:auto;display:block;background:#fffdf7;border-radius:12px}.small{font-size:13px;color:#665b4f}.legend{display:flex;gap:8px;align-items:center;margin:6px 0}.dot{width:14px;height:14px;border-radius:50%;display:inline-block}.footer{padding:10px 16px 18px;text-align:center;color:#6a5b4c;font-size:13px}
+  @media(max-width:900px){.wrap{grid-template-columns:1fr}.side{order:-1}}
+</style>
+</head>
+<body>
+<header><h1>力的測量：砝碼質量與彈簧總長度</h1><p>拖曳彈簧上端到橫軸刻度，觀察砝碼數量、彈簧伸長與關係圖</p></header>
+<div class="wrap">
+  <div class="card" id="canvasBox">
+    <div class="toolbar">
+      <button id="resetBtn">重新開始</button>
+      <button id="autoBtn" class="secondary">自動標出正確座標</button>
+      <span class="hint">操作：拖曳上方褐色圓點到 0～70 g 刻度；再點選圖上位置標出座標。</span>
+    </div>
+    <svg id="svg" viewBox="0 0 920 680" aria-label="彈簧伸長互動座標圖">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f2a24"/></marker>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2" dy="3" stdDeviation="2" flood-opacity="0.25"/></filter>
+      </defs>
+      <rect x="0" y="0" width="920" height="680" fill="transparent"/>
+      <g id="grid"></g>
+      <g id="axes"></g>
+      <polyline id="studentLine" fill="none" stroke="#315f8c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
+      <g id="studentPoints"></g>
+      <g id="springGroup" filter="url(#shadow)"></g>
+      <g id="labels"></g>
+      <g id="dragHandle" style="cursor:grab"></g>
+    </svg>
+    <div class="footer">註：此模擬設定每增加 10 g 砝碼，彈簧伸長 5 cm；超過 60 g 後用「彈性疲乏」呈現不再符合線性關係。</div>
+  </div>
+  <aside class="card side">
+    <div class="readout" id="readout"></div>
+    <div class="formula"><b>觀察重點</b><br>砝碼越重，施力越大；在彈性限度內，伸長量與施力大小大致成正比。</div>
+    <div class="warn" id="warnBox">⚠ 已超過 60 g：彈簧出現彈性疲乏，總長度不再照原本規律增加。</div>
+    <div><b>給學生的任務</b></div>
+    <ol>
+      <li>把彈簧上端拖到 10、20、30…g 的刻度。</li>
+      <li>讀出彈簧尾端座標，例如：<b>（20，20 cm）</b>。</li>
+      <li>在座標圖上點出每一次的彈簧總長。</li>
+      <li>觀察連線：60 g 以前是不是接近一直線？60 g 以後發生什麼事？</li>
+    </ol>
+    <div class="legend"><span class="dot" style="background:#b94a48"></span>彈簧尾端目前位置</div>
+    <div class="legend"><span class="dot" style="background:#315f8c"></span>學生點出的座標</div>
+    <p class="small">建議引導語：彈簧總長度＝原長 10 cm＋伸長量。此活動可連結虎克定律與彈性限度概念。</p>
+  </aside>
+</div>
+<script>
+const svg = document.getElementById('svg');
+const grid = document.getElementById('grid');
+const axes = document.getElementById('axes');
+const springGroup = document.getElementById('springGroup');
+const dragHandle = document.getElementById('dragHandle');
+const labels = document.getElementById('labels');
+const studentPointsG = document.getElementById('studentPoints');
+const line = document.getElementById('studentLine');
+const readout = document.getElementById('readout');
+const warnBox = document.getElementById('warnBox');
+const resetBtn = document.getElementById('resetBtn');
+const autoBtn = document.getElementById('autoBtn');
+const O = {x:110, y:70};
+const xScale = 10; // 10 px = 1 g, so 100 px per 10 g
+const yScale = 10; // 10 px = 1 cm
+let mass = 0;
+let studentPoints = [];
+function totalLen(m){
+  if(m<=60) return 10 + m*0.5;
+  return 40 + (m-60)*0.15 + 4*Math.sin((m-60)/10*Math.PI); // fatigue, non-linear
+}
+function X(g){return O.x + g*xScale;}
+function Y(cm){return O.y + cm*yScale;}
+function nearestMassFromClient(evt){
+  const pt = svg.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
+  const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+  let m = Math.round((p.x - O.x)/(10*xScale))*10;
+  return Math.max(0, Math.min(70, m));
+}
+function make(tag, attrs){ const el=document.createElementNS('http://www.w3.org/2000/svg',tag); for(const k in attrs) el.setAttribute(k,attrs[k]); return el; }
+function drawBase(){
+  grid.innerHTML=''; axes.innerHTML=''; labels.innerHTML='';
+  // grid lines
+  for(let g=0; g<=70; g+=10){
+    grid.appendChild(make('line',{x1:X(g),y1:O.y,x2:X(g),y2:Y(50),stroke:'#d9ccb2','stroke-width':1}));
+  }
+  for(let cm=0; cm<=50; cm+=5){
+    grid.appendChild(make('line',{x1:O.x,y1:Y(cm),x2:X(70),y2:Y(cm),stroke:'#eadfc9','stroke-width':1}));
+  }
+  axes.appendChild(make('line',{x1:O.x,y1:O.y,x2:X(72),y2:O.y,stroke:'#2f2a24','stroke-width':3,'marker-end':'url(#arrow)'}));
+  axes.appendChild(make('line',{x1:O.x,y1:O.y,x2:O.x,y2:Y(52),stroke:'#2f2a24','stroke-width':3,'marker-end':'url(#arrow)'}));
+  labels.appendChild(text(X(36),38,'掛上砝碼的質量（g）',18,'#2f2a24','middle'));
+  labels.appendChild(text(35,Y(27),'彈簧總長度（cm）',18,'#2f2a24','middle','rotate(-90 35 '+Y(27)+')'));
+  for(let g=0; g<=70; g+=10){
+    axes.appendChild(make('line',{x1:X(g),y1:O.y-6,x2:X(g),y2:O.y+6,stroke:'#2f2a24','stroke-width':2}));
+    labels.appendChild(text(X(g),O.y-14,g,14,'#2f2a24','middle'));
+  }
+  for(let cm=0; cm<=50; cm+=5){
+    axes.appendChild(make('line',{x1:O.x-6,y1:Y(cm),x2:O.x+6,y2:Y(cm),stroke:'#2f2a24','stroke-width':2}));
+    labels.appendChild(text(O.x-18,Y(cm)+5,cm,13,'#2f2a24','end'));
+  }
+}
+function text(x,y,content,size,color,anchor='start',transform=''){
+  const t=make('text',{x,y,'font-size':size,fill:color,'text-anchor':anchor,'font-weight':'700'}); if(transform)t.setAttribute('transform',transform); t.textContent=content; return t;
+}
+function springPath(x, topY, lenPx){
+  const coils = Math.max(7, Math.round(lenPx/34)); let d=`M ${x} ${topY}`; let y=topY+8;
+  const step=(lenPx-16)/coils; for(let i=0;i<coils;i++){ d+=` C ${x-22} ${y+step*.25}, ${x+22} ${y+step*.75}, ${x} ${y+step}`; y+=step; }
+  d+=` L ${x} ${topY+lenPx}`; return d;
+}
+function drawSpring(){
+  springGroup.innerHTML=''; dragHandle.innerHTML='';
+  const x=X(mass), len=totalLen(mass), yEnd=Y(len);
+  springGroup.appendChild(make('line',{x1:x,y1:O.y-38,x2:x,y2:O.y,stroke:'#6b4a35','stroke-width':6,'stroke-linecap':'round'}));
+  springGroup.appendChild(make('path',{d:springPath(x,O.y, len*yScale),fill:'none',stroke: mass>60?'#b94a48':'#555','stroke-width':5,'stroke-linecap':'round'}));
+  springGroup.appendChild(make('circle',{cx:x,cy:yEnd,r:9,fill:'#b94a48'}));
+  const count=Math.round(mass/10);
+  for(let i=0;i<count;i++){
+    const yy=yEnd+18+i*28;
+    springGroup.appendChild(make('rect',{x:x-24,y:yy,width:48,height:22,rx:5,fill:'#b98b55',stroke:'#5b3b22','stroke-width':2}));
+    springGroup.appendChild(text(x,yy+16,'10g',13,'#fff','middle'));
+  }
+  springGroup.appendChild(text(x+14,yEnd+5,`（${mass}，${len.toFixed(1).replace('.0','')} cm）`,16,'#8a2d2a','start'));
+  dragHandle.appendChild(make('circle',{cx:x,cy:O.y,r:15,fill:'#7a4a2a',stroke:'#fff','stroke-width':4}));
+  dragHandle.appendChild(text(x,O.y-24,'拖曳',14,'#7a4a2a','middle'));
+  readout.innerHTML = `目前：${mass} g｜${count} 顆砝碼<br>彈簧總長度：${len.toFixed(1).replace('.0','')} cm`;
+  warnBox.style.display = mass>60 ? 'block' : 'none';
+}
+function drawStudentPoints(){
+  studentPointsG.innerHTML='';
+  studentPoints.sort((a,b)=>a.m-b.m);
+  line.setAttribute('points', studentPoints.map(p=>`${X(p.m)},${Y(p.len)}`).join(' '));
+  for(const p of studentPoints){
+    studentPointsG.appendChild(make('circle',{cx:X(p.m),cy:Y(p.len),r:7,fill:'#315f8c',stroke:'#fff','stroke-width':3}));
+    studentPointsG.appendChild(text(X(p.m)+8,Y(p.len)-8,`(${p.m}, ${p.len.toFixed(1).replace('.0','')})`,13,'#315f8c'));
+  }
+}
+function update(){ drawBase(); drawStudentPoints(); drawSpring(); }
+let dragging=false;
+dragHandle.addEventListener('pointerdown', e=>{dragging=true; svg.setPointerCapture(e.pointerId);});
+svg.addEventListener('pointermove', e=>{ if(dragging){ mass=nearestMassFromClient(e); update(); }});
+svg.addEventListener('pointerup', e=>{dragging=false;});
+svg.addEventListener('click', e=>{
+  if(dragging) return;
+  const m = mass; const len=totalLen(m);
+  const existing = studentPoints.findIndex(p=>p.m===m);
+  if(existing>=0) studentPoints[existing]={m,len}; else studentPoints.push({m,len});
+  drawStudentPoints();
+});
+resetBtn.addEventListener('click',()=>{mass=0; studentPoints=[]; update();});
+autoBtn.addEventListener('click',()=>{studentPoints=[]; for(let m=0;m<=70;m+=10) studentPoints.push({m,len:totalLen(m)}); drawStudentPoints();});
+update();
+</script>
+</body>
+</html>
