@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>八年級自然｜影響壓力因素互動實驗</title>
+<style>
+  :root{
+    --blue:#4f86c6;
+    --deep:#24527a;
+    --light:#eaf3ff;
+    --orange:#f08b35;
+    --green:#4ca66a;
+    --red:#d85c5c;
+    --line:#c9d6e2;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:"Microsoft JhengHei","Noto Sans TC",Arial,sans-serif;
+    background:linear-gradient(180deg,#f7fbff,#fff);
+    color:#263238;
+  }
+  header{
+    background:linear-gradient(120deg,#2f6fae,#77acd9);
+    color:#fff;
+    padding:24px 30px;
+    box-shadow:0 3px 12px rgba(0,0,0,.16);
+  }
+  header h1{margin:0 0 8px;font-size:30px}
+  header p{margin:0;font-size:16px;opacity:.95}
+  main{max-width:1180px;margin:0 auto;padding:18px}
+  .card{
+    background:#fff;border:1px solid #d8e3ee;border-radius:18px;padding:18px;margin:14px 0;
+    box-shadow:0 4px 16px rgba(32,78,118,.08);
+  }
+  h2{color:var(--deep);margin:5px 0 12px}
+  h3{color:#315f8f;margin:8px 0 12px}
+  .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .hint{
+    background:#fff8e9;border-left:6px solid var(--orange);padding:12px 14px;border-radius:8px;
+    line-height:1.75;margin:10px 0;
+  }
+  .steps{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;
+  }
+  @media(max-width:900px){.steps{grid-template-columns:1fr}}
+  .step{
+    border:1px solid #d4e2ef;border-radius:14px;background:#fbfdff;padding:12px;line-height:1.7;
+  }
+  .step b{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;margin-right:6px;
+  }
+  .simbox{
+    height:450px;border:1px solid var(--line);border-radius:16px;
+    background:linear-gradient(#fdfefe 0 68%,#eef2f5 68% 100%);
+    position:relative;overflow:hidden;
+  }
+  .floor{
+    position:absolute;left:0;right:0;bottom:68px;height:6px;background:#b8c4cf;
+  }
+  .label{
+    position:absolute;background:#fff;border:1px solid #c7d6e6;border-radius:999px;
+    padding:6px 12px;font-weight:700;color:#254b72;box-shadow:0 2px 8px rgba(0,0,0,.05);
+    z-index:4;
+  }
+  .simHint{
+    position:absolute;left:50%;transform:translateX(-50%);bottom:16px;
+    background:rgba(255,255,255,.9);border:1px solid #d4e2ef;border-radius:999px;
+    padding:6px 14px;font-size:14px;color:#46698b;z-index:4;
+  }
+
+  .spongeWrap{
+    position:absolute;left:145px;bottom:72px;width:350px;height:120px;z-index:1;
+    filter:drop-shadow(0 10px 10px rgba(0,0,0,.10));
+  }
+  .spongeShadow{
+    position:absolute;left:176px;bottom:62px;width:300px;height:18px;
+    border-radius:50%;background:radial-gradient(ellipse at center, rgba(0,0,0,.18), rgba(0,0,0,0));
+    z-index:0;
+  }
+
+  .bottle{
+    position:absolute;left:272px;bottom:188px;width:100px;height:220px;
+    transition:transform .22s ease,left .22s ease,bottom .22s ease,width .22s ease,height .22s ease;
+    transform-origin:center bottom; z-index:3;
+  }
+  .bottle .cap{
+    position:absolute;left:33px;top:0;width:34px;height:18px;background:#d9f2f9;border:2px solid #72a9be;border-radius:6px 6px 2px 2px;
+  }
+  .bottle .neck{
+    position:absolute;left:28px;top:16px;width:44px;height:28px;background:rgba(130,205,228,.45);border:2px solid #4f9ec2;border-bottom:0;border-radius:10px 10px 0 0;
+  }
+  .bottle .body{
+    position:absolute;left:10px;top:42px;width:80px;height:176px;
+    background:linear-gradient(180deg,rgba(255,255,255,.60),rgba(181,234,247,.18));
+    border:3px solid #4f9ec2;border-radius:24px 24px 18px 18px;overflow:hidden;
+    box-shadow:inset 0 0 22px rgba(255,255,255,.75), 0 6px 14px rgba(0,0,0,.10);
+  }
+  .bottle .water{
+    position:absolute;left:0;right:0;bottom:0;height:0%;
+    background:linear-gradient(180deg,rgba(101,194,225,.55),rgba(34,141,190,.76));
+    transition:height .22s ease,width .22s ease;
+  }
+  .bottle .stripe{position:absolute;left:8px;right:8px;height:4px;background:rgba(47,111,174,.16);border-radius:4px;}
+  .bottle.inverted{transform:none;}
+  .bottle.inverted .body{
+    top:0;
+    border-radius:18px 18px 24px 24px;
+  }
+  .bottle.inverted .neck{
+    top:174px;
+    border:2px solid #4f9ec2;
+    border-top:0;
+    border-radius:0 0 10px 10px;
+  }
+  .bottle.inverted .cap{
+    top:202px;
+    border-radius:2px 2px 6px 6px;
+  }
+  .bottle.side{
+    width:228px;height:102px;left:208px;
+  }
+  .bottle.side .cap{left:204px;top:37px;width:18px;height:28px;border-radius:2px 6px 6px 2px}
+  .bottle.side .neck{left:177px;top:30px;width:28px;height:42px;border-left:0;border-radius:0 10px 10px 0}
+  .bottle.side .body{left:0;top:10px;width:184px;height:82px;border-radius:24px 18px 18px 24px}
+  .bottle.side .water{height:100%;width:0%;right:auto;top:0;bottom:0}
+  .bottle.side .stripe{left:20px;right:20px;height:3px}
+
+  .contactMark{
+    position:absolute;bottom:180px;left:278px;height:7px;width:88px;background:#d85c5c;border-radius:999px;
+    box-shadow:0 0 0 2px rgba(216,92,92,.08);
+    transition:left .22s ease,width .22s ease,bottom .22s ease; z-index:2;
+  }
+
+  .forceArrow{
+    position:absolute;left:388px;top:78px;width:4px;height:82px;background:#d85c5c;border-radius:4px;
+    transition:height .22s ease,left .22s ease;
+    z-index:2;
+  }
+  .forceArrow::after{
+    content:"";position:absolute;left:-8px;bottom:-2px;border-top:16px solid #d85c5c;border-left:10px solid transparent;border-right:10px solid transparent;
+  }
+
+  .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}
+  input[type=range]{width:360px;max-width:100%}
+  button,select{
+    font-family:inherit;font-size:16px;border-radius:10px;border:1px solid #b8c9da;background:#fff;padding:9px 12px;
+  }
+  button{cursor:pointer}
+  button.primary{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:800}
+  button.green{background:var(--green);color:#fff;border-color:var(--green);font-weight:800}
+  button.orange{background:var(--orange);color:#fff;border-color:var(--orange);font-weight:800}
+  .status{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;
+  }
+  @media(max-width:900px){.status{grid-template-columns:1fr 1fr}}
+  .stat{background:var(--light);border-radius:12px;padding:12px;text-align:center;font-weight:800;color:#244b73}
+  .stat span{display:block;font-size:24px;margin-top:6px;color:#111}
+  .questionBox{
+    background:#f7fbff;border:1px dashed #9ebad4;border-radius:14px;padding:14px;line-height:1.8;
+  }
+  table{border-collapse:collapse;width:100%;font-size:15px;background:#fff}
+  th,td{border:1px solid #c8d4df;padding:8px;text-align:center}
+  th{background:#dceaf7;color:#223d59}
+  .small{font-size:14px;color:#607080;line-height:1.65}
+  .canvasWrap{overflow:auto;background:#fff;border:1px solid #ccd9e6;border-radius:14px;padding:10px}
+  canvas{background:#fff;display:block;margin:auto}
+</style>
+</head>
+<body>
+<header>
+  <h1>八年級自然｜影響壓力因素互動實驗</h1>
+  <p>透過寶特瓶、水量、放置方向與海綿凹陷程度，觀察影響壓力大小的因素。</p>
+</header>
+
+<main>
+  <div class="card">
+    <h2>實驗目標</h2>
+    <div class="hint">
+      這個互動實驗不直接顯示公式，讓學生先觀察「寶特瓶總重」、「接觸面積」與「海綿凹陷程度」的變化，再推論造成壓力大小改變的原因。
+    </div>
+    <div class="steps">
+      <div class="step"><b>1</b>調整寶特瓶內水量，觀察重量增加時海綿凹陷是否改變。</div>
+      <div class="step"><b>2</b>改變寶特瓶放置方向，觀察接觸面積改變時海綿凹陷是否改變。</div>
+      <div class="step"><b>3</b>把不同組合記錄在表格中，從資料推論影響壓力的因素。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>互動操作區</h2>
+    <div class="grid">
+      <div>
+        <div class="simbox">
+          <div class="label" id="waterLabel" style="left:24px;top:22px">水量：0 mL</div>
+          <div class="label" id="weightLabel" style="left:24px;top:66px">總重：50 gw</div>
+          <div class="label" id="areaLabel" style="right:24px;top:22px">接觸面積：20 cm²</div>
+          <div class="label" id="dentLabel" style="right:24px;top:66px">凹陷：0.25 cm</div>
+
+          <div class="forceArrow" id="forceArrow"></div>
+
+          <div class="bottle" id="bottle">
+            <div class="cap"></div>
+            <div class="neck"></div>
+            <div class="body">
+              <div class="water" id="water"></div>
+              <div class="stripe" style="top:36px"></div>
+              <div class="stripe" style="top:74px"></div>
+              <div class="stripe" style="top:112px"></div>
+            </div>
+          </div>
+
+          <div class="contactMark" id="contactMark"></div>
+
+          <div class="spongeShadow"></div>
+          <div class="spongeWrap">
+            <svg id="spongeSvg" width="350" height="120" viewBox="0 0 350 120">
+              <defs>
+                <linearGradient id="spongeGrad" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#8bd3ea"/>
+                  <stop offset="55%" stop-color="#67b9d4"/>
+                  <stop offset="100%" stop-color="#3b8eb1"/>
+                </linearGradient>
+                <linearGradient id="dentGrad" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#d8f4fb"/>
+                  <stop offset="100%" stop-color="#a9d9eb"/>
+                </linearGradient>
+                <filter id="innerShadow" x="-20%" y="-20%" width="140%" height="160%">
+                  <feOffset dx="0" dy="3"/>
+                  <feGaussianBlur stdDeviation="4" result="offset-blur"/>
+                  <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/>
+                  <feFlood flood-color="#0e5f86" flood-opacity="0.22" result="color"/>
+                  <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
+                  <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+                </filter>
+              </defs>
+              <path id="spongeShape" fill="url(#spongeGrad)" stroke="#28799e" stroke-width="3" filter="url(#innerShadow)"></path>
+              <path id="dentShape" fill="url(#dentGrad)" opacity="0.90"></path>
+              <g id="pores" opacity="0.28"></g>
+            </svg>
+          </div>
+
+          <div class="floor"></div>
+          <div class="simHint">觀察海綿：接觸面積越小、重量越大，凹陷通常越深。</div>
+        </div>
+
+        <div class="controls">
+          <label><b>寶特瓶水量：</b>
+            <input id="waterAmount" type="range" min="0" max="300" step="10" value="0" oninput="updateSim()">
+          </label>
+        </div>
+
+        <div class="controls">
+          <label><b>放置方向：</b>
+            <select id="orientation" onchange="updateSim()">
+              <option value="upright">正立：接觸面積 20 cm²</option>
+              <option value="inverted">倒立：接觸面積 2 cm²</option>
+              <option value="side">側立：接觸面積 40 cm²</option>
+            </select>
+          </label>
+          <button class="primary" onclick="recordData()">記錄本次結果</button>
+          <button class="green" onclick="autoDemo()">自動示範資料</button>
+          <button onclick="resetAll()">重設</button>
+        </div>
+
+        <div class="status">
+          <div class="stat">水量<span id="waterStat">0 mL</span></div>
+          <div class="stat">寶特瓶總重<span id="weightStat">50 gw</span></div>
+          <div class="stat">接觸面積<span id="areaStat">20 cm²</span></div>
+          <div class="stat">海綿凹陷<span id="dentStat">0.25 cm</span></div>
+        </div>
+      </div>
+
+      <div>
+        <h3>實驗步驟教學</h3>
+        <div class="questionBox">
+          <p><b>步驟一：</b>先將寶特瓶正立放在海綿上，逐漸增加水量，觀察海綿凹陷程度。</p>
+          <p><b>步驟二：</b>固定相同水量，改變寶特瓶放置方向，觀察海綿凹陷程度。</p>
+          <p><b>步驟三：</b>記錄寶特瓶總重、接觸面積與海綿凹陷程度。</p>
+          <p><b>想一想：</b>什麼情況下，海綿凹陷比較深？重量和接觸面積分別造成什麼影響？</p>
+        </div>
+
+        <h3>紀錄表</h3>
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>次數</th>
+              <th>水量<br>mL</th>
+              <th>放置方向</th>
+              <th>寶特瓶總重<br>gw</th>
+              <th>接觸面積<br>cm²</th>
+              <th>海綿凹陷程度<br>cm</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p class="small">表格數據會自動計算凹陷程度，但不直接顯示計算關係，方便學生從觀察中自行推論。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>資料觀察圖</h2>
+    <p class="small">可將紀錄表轉成圖形，幫助學生比較資料趨勢。圖形仍不顯示公式，只呈現實驗資料關係。</p>
+    <div class="controls">
+      <button class="orange" onclick="drawWeightChart()">圖一：總重與凹陷程度</button>
+      <button class="orange" onclick="drawAreaChart()">圖二：接觸面積與凹陷程度</button>
+      <button onclick="clearChart()">清除圖形</button>
+    </div>
+    <div class="canvasWrap"><canvas id="chart" width="820" height="520"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>學生推論問題</h2>
+    <div class="questionBox">
+      <p>1. 當寶特瓶放置方向相同時，水量越多，海綿凹陷程度如何變化？</p>
+      <p>2. 當寶特瓶總重相同時，接觸面積越小，海綿凹陷程度如何變化？</p>
+      <p>3. 根據表格資料，你認為影響壓力大小的因素有哪些？</p>
+      <p>4. 請嘗試用「寶特瓶總重」和「接觸面積」說明壓力大小可能如何計算。</p>
+    </div>
+  </div>
+</main>
+
+<script>
+const bottleWeight = 50;
+const areaMap = {
+  upright: {label:'正立', area:20, contactWidth:88},
+  inverted: {label:'倒立', area:2, contactWidth:22},
+  side: {label:'側立', area:40, contactWidth:205}
+};
+let records = [];
+
+function setText(id, txt){ document.getElementById(id).textContent = txt; }
+
+function getState(){
+  const water = Number(document.getElementById('waterAmount').value);
+  const ori = document.getElementById('orientation').value;
+  const totalWeight = bottleWeight + water;
+  const area = areaMap[ori].area;
+  const pressureIndex = totalWeight / area;
+  const dent = Math.min(8, Math.max(0.25, pressureIndex * 0.10));
+  return {water, ori, totalWeight, area, dent};
+}
+
+function ensurePores(){
+  const group = document.getElementById('pores');
+  if(group.children.length > 0) return;
+  const positions = [
+    [32,48],[68,36],[110,52],[150,40],[200,55],[240,38],[292,50],
+    [42,80],[92,74],[130,88],[175,76],[218,84],[266,74],[308,86]
+  ];
+  positions.forEach((p,i)=>{
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',p[0]); c.setAttribute('cy',p[1]);
+    c.setAttribute('r', i % 3 === 0 ? 5 : 4);
+    c.setAttribute('fill', i % 2 === 0 ? '#c7eef8' : '#a8ddeb');
+    group.appendChild(c);
+  });
+}
+
+function drawSponge(dentCm, orientation){
+  ensurePores();
+  const sponge = document.getElementById('spongeShape');
+  const dentShape = document.getElementById('dentShape');
+  const wrap = document.querySelector('.spongeWrap');
+
+  const W = 350, H = 120;
+  const left = 20, right = W - 20;
+  const baseTop = 28;
+  const bottom = 108;
+
+  const contactW = orientation === 'side' ? 210 : (orientation === 'inverted' ? 76 : 148);
+  const center = W / 2;
+  const dentDepth = Math.min(42, 8 + dentCm * 7.5);
+  const shoulderLift = Math.min(10, dentDepth * 0.10);
+
+  const x1 = center - contactW/2;
+  const x2 = center + contactW/2;
+  const topY = baseTop + shoulderLift;
+  const deepY = baseTop + dentDepth;
+
+  const bodyPath = [
+    `M ${left} ${topY}`,
+    `C ${left+28} ${topY-6}, ${x1-28} ${topY-2}, ${x1} ${topY+4}`,
+    `C ${x1+28} ${topY+12}, ${center-34} ${deepY}, ${center} ${deepY}`,
+    `C ${center+34} ${deepY}, ${x2-28} ${topY+12}, ${x2} ${topY+4}`,
+    `C ${x2+28} ${topY-2}, ${right-28} ${topY-6}, ${right} ${topY}`,
+    `L ${right+8} ${bottom-8}`,
+    `Q ${right+10} ${bottom}, ${right-4} ${bottom}`,
+    `L ${left+4} ${bottom}`,
+    `Q ${left-10} ${bottom}, ${left-8} ${bottom-8}`,
+    `Z`
+  ].join(' ');
+  sponge.setAttribute('d', bodyPath);
+
+  const innerLeft = Math.max(left + 18, x1 - 16);
+  const innerRight = Math.min(right - 18, x2 + 16);
+  const dentInnerPath = [
+    `M ${innerLeft} ${topY+4}`,
+    `C ${x1-6} ${topY+14}, ${center-34} ${deepY-2}, ${center} ${deepY-2}`,
+    `C ${center+34} ${deepY-2}, ${x2+6} ${topY+14}, ${innerRight} ${topY+4}`,
+    `L ${innerRight-10} ${topY+16}`,
+    `C ${x2-6} ${topY+22}, ${center+28} ${deepY+10}, ${center} ${deepY+10}`,
+    `C ${center-28} ${deepY+10}, ${x1+6} ${topY+22}, ${innerLeft+10} ${topY+16}`,
+    `Z`
+  ].join(' ');
+  dentShape.setAttribute('d', dentInnerPath);
+
+  wrap.style.transform = `translateY(${Math.min(16, dentCm*1.8)}px) scaleY(${1 - Math.min(0.16, dentCm*0.018)})`;
+}
+
+function updateSim(){
+  const s = getState();
+  const bottle = document.getElementById('bottle');
+  const water = document.getElementById('water');
+  const contact = document.getElementById('contactMark');
+  const arrow = document.getElementById('forceArrow');
+
+  bottle.className = 'bottle';
+  if(s.ori === 'inverted') bottle.classList.add('inverted');
+  if(s.ori === 'side') bottle.classList.add('side');
+
+  const sinkPx = Math.min(22, s.dent * 2.8);
+
+  if(s.ori === 'side'){
+    bottle.style.left = '208px';
+    bottle.style.bottom = (188 - sinkPx) + 'px';
+    water.style.height = '100%';
+    water.style.width = (s.water / 300 * 100) + '%';
+    contact.style.left = '220px';
+    contact.style.width = '205px';
+    contact.style.bottom = (179 - sinkPx) + 'px';
+    arrow.style.left = '436px';
+  }else if(s.ori === 'upright'){
+    bottle.style.left = '272px';
+    bottle.style.bottom = (188 - sinkPx) + 'px';
+    water.style.width = '100%';
+    water.style.height = (s.water / 300 * 100) + '%';
+    contact.style.left = '278px';
+    contact.style.width = '88px';
+    contact.style.bottom = (179 - sinkPx) + 'px';
+    arrow.style.left = '388px';
+  }else{
+    // 倒立不再用旋轉，而是直接把瓶口畫在瓶子最下方。
+    // 因此 bottle.bottom 就是瓶口接觸海綿的位置。
+    bottle.style.left = '272px';
+    bottle.style.bottom = (188 - sinkPx) + 'px';
+    water.style.width = '100%';
+    water.style.height = (s.water / 300 * 100) + '%';
+    contact.style.left = '311px';
+    contact.style.width = '26px';
+    contact.style.bottom = (179 - sinkPx) + 'px';
+    arrow.style.left = '388px';
+  }
+
+  arrow.style.height = Math.min(190, 60 + s.totalWeight / 2.2) + 'px';
+  drawSponge(s.dent, s.ori);
+
+  setText('waterLabel', '水量：' + s.water + ' mL');
+  setText('weightLabel', '總重：' + s.totalWeight + ' gw');
+  setText('areaLabel', '接觸面積：' + s.area + ' cm²');
+  setText('dentLabel', '凹陷：' + s.dent.toFixed(2) + ' cm');
+  setText('waterStat', s.water + ' mL');
+  setText('weightStat', s.totalWeight + ' gw');
+  setText('areaStat', s.area + ' cm²');
+  setText('dentStat', s.dent.toFixed(2) + ' cm');
+}
+
+function recordData(){
+  if(records.length >= 18){
+    alert('已達18筆，請先重設或整理表格。');
+    return;
+  }
+  records.push(getState());
+  renderTable();
+}
+
+function renderTable(){
+  const tbody = document.querySelector('#dataTable tbody');
+  tbody.innerHTML = '';
+  records.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td>${r.water}</td>
+      <td>${areaMap[r.ori].label}</td>
+      <td>${r.totalWeight}</td>
+      <td>${r.area}</td>
+      <td>${r.dent.toFixed(2)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function autoDemo(){
+  records = [];
+  const demos = [
+    {water:0, ori:'upright'}, {water:100, ori:'upright'}, {water:200, ori:'upright'}, {water:300, ori:'upright'},
+    {water:200, ori:'inverted'}, {water:200, ori:'upright'}, {water:200, ori:'side'},
+    {water:0, ori:'inverted'}, {water:100, ori:'inverted'}, {water:300, ori:'inverted'},
+    {water:0, ori:'side'}, {water:100, ori:'side'}, {water:300, ori:'side'}
+  ];
+  demos.forEach(d => {
+    const totalWeight = bottleWeight + d.water;
+    const area = areaMap[d.ori].area;
+    const dent = Math.min(8, Math.max(0.25, (totalWeight / area) * 0.10));
+    records.push({water:d.water, ori:d.ori, totalWeight, area, dent});
+  });
+  renderTable();
+  drawWeightChart();
+}
+
+function resetAll(){
+  records = [];
+  renderTable();
+  document.getElementById('waterAmount').value = 0;
+  document.getElementById('orientation').value = 'upright';
+  updateSim();
+  clearChart();
+}
+
+function clearChart(){
+  const canvas = document.getElementById('chart');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = '#607080';
+  ctx.font = '18px Microsoft JhengHei';
+  ctx.textAlign = 'center';
+  ctx.fillText('請先記錄資料，再選擇上方圖形按鈕。', canvas.width/2, canvas.height/2);
+}
+
+function drawAxes(ctx, canvas, xlabel, ylabel, xmax, ymax){
+  const L=75, R=30, T=35, B=75, W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#333'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(L,T); ctx.lineTo(L,H-B); ctx.lineTo(W-R,H-B); ctx.stroke();
+
+  ctx.font='13px Microsoft JhengHei'; ctx.fillStyle='#333';
+  ctx.textAlign='center';
+  const xStep = xmax <= 60 ? 10 : 50;
+  for(let x=0;x<=xmax;x+=xStep){
+    const px = L + x/xmax*(W-L-R);
+    ctx.strokeStyle='#d0d9e2'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(px,T); ctx.lineTo(px,H-B); ctx.stroke();
+    ctx.fillStyle='#333'; ctx.fillText(x,px,H-B+22);
+  }
+  ctx.textAlign='right';
+  for(let y=0;y<=ymax+0.001;y+=0.5){
+    const py = H-B-y/ymax*(H-T-B);
+    ctx.strokeStyle='#d0d9e2';
+    ctx.beginPath(); ctx.moveTo(L,py); ctx.lineTo(W-R,py); ctx.stroke();
+    ctx.fillStyle='#333'; ctx.fillText(y.toFixed(1),L-10,py+4);
+  }
+  ctx.save();
+  ctx.fillStyle='#244b73'; ctx.font='bold 16px Microsoft JhengHei'; ctx.textAlign='center';
+  ctx.fillText(xlabel,(L+W-R)/2,H-25);
+  ctx.translate(22,(T+H-B)/2); ctx.rotate(-Math.PI/2); ctx.fillText(ylabel,0,0);
+  ctx.restore();
+  return {L,R,T,B,W,H,xmax,ymax};
+}
+
+function plotPoints(ctx, axis, pts, xKey){
+  pts.forEach(p=>{
+    const x = axis.L + p[xKey]/axis.xmax*(axis.W-axis.L-axis.R);
+    const y = axis.H-axis.B - p.dent/axis.ymax*(axis.H-axis.T-axis.B);
+    ctx.fillStyle = '#f08b35';
+    ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#333';
+    ctx.font = '12px Microsoft JhengHei';
+    ctx.textAlign = 'left';
+    ctx.fillText(areaMap[p.ori].label, x+8, y-8);
+  });
+}
+
+function drawWeightChart(){
+  if(records.length === 0){ alert('請先記錄至少一筆資料。'); return; }
+  const canvas = document.getElementById('chart');
+  const ctx = canvas.getContext('2d');
+  const axis = drawAxes(ctx, canvas, '寶特瓶總重（gw）', '海綿凹陷程度（cm）', 350, 8);
+  plotPoints(ctx, axis, records, 'totalWeight');
+}
+
+function drawAreaChart(){
+  if(records.length === 0){ alert('請先記錄至少一筆資料。'); return; }
+  const canvas = document.getElementById('chart');
+  const ctx = canvas.getContext('2d');
+  const axis = drawAxes(ctx, canvas, '接觸面積（cm²）', '海綿凹陷程度（cm）', 50, 8);
+  plotPoints(ctx, axis, records, 'area');
+}
+
+window.onload = () => {
+  ensurePores();
+  updateSim();
+  clearChart();
+};
+</script>
+</body>
+</html>
